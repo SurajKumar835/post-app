@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PostService } from '../post.service';
 
 @Component({
   selector: 'app-biodata',
@@ -27,6 +28,11 @@ import { Component, OnInit } from '@angular/core';
   <input type="text" name="email" [(ngModel)]="email"/>
   </form>
   <hr />
+  <h3>Comments :-</h3>
+  <div *ngFor="let post of posts">
+      <h3>{{post.title}}</h3>
+      <p>{{post.body}}</p>
+  </div>
   `
 })
 export class BiodataComponent implements OnInit {
@@ -36,8 +42,9 @@ export class BiodataComponent implements OnInit {
         address:address;
         hobbies:string[];
         showHobbies:boolean;
+        posts;
         
-  constructor() { 
+  constructor(private postsService:PostService) { 
           this.title="Bio-Data";
           this.name="Suraj Kumar";
           this.email="Surajkumar.kumar@gmail.com";
@@ -49,6 +56,10 @@ export class BiodataComponent implements OnInit {
           };
           this.hobbies=["Music","Code","Travel","Trekking"];  
           this.showHobbies=false;
+          this.postsService.getPosts().subscribe(posts=>
+          {
+              this.posts=posts;
+          });
       }
 
       toggleHobbies(){
@@ -72,4 +83,9 @@ interface address{
   city:string;
   district:string;
   postalpin:string;
+}
+interface Post{
+  id:number;
+  title:string;
+  body:string;
 }
